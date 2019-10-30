@@ -32,7 +32,8 @@ const loadShader = (gl, type, source)=>{
 }
 
 const initShader = (gl, vsSource, fsSource)=>{
-
+    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 }
 
 const main = ()=>{
@@ -43,7 +44,7 @@ const main = ()=>{
         return;
     }
 
-    initShader(gl, vsSource, fsShader)
+    initShader(gl, vsSource, fsSource)
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 }
