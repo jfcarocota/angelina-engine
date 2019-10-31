@@ -34,6 +34,18 @@ const loadShader = (gl, type, source)=>{
 const initShader = (gl, vsSource, fsSource)=>{
     const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
     const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+        return null;
+    }
+
+    return shaderProgram;
 }
 
 const main = ()=>{
@@ -44,7 +56,19 @@ const main = ()=>{
         return;
     }
 
-    initShader(gl, vsSource, fsSource)
+    const shaderProgram = initShader(gl, vsSource, fsSource);
+
+    const programInfo = {
+        program : shaderProgram,
+        attribLocations : {
+            vertexPosition : gl.getAttribLocation(shaderProgram, 'aVertexPosition')
+        },
+        uniformLoations: {
+            projectionMatrix : gl.getAttribLocation(shaderProgram, 'uProjectionMatrix'),
+            modelViewMatrix : gl.getAttribLocation(shaderProgram, 'uModelViewMatrix')
+        }
+    };
+
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 }
