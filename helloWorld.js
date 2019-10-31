@@ -48,6 +48,45 @@ const initShader = (gl, vsSource, fsSource)=>{
     return shaderProgram;
 }
 
+const initBuffer = gl =>{
+    const positionBuffer = gl.createBuffer();
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    const positions = [
+        -1, 1,
+        1, 1,
+        -1, -1, 
+        1, -1
+    ];
+
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(positions),
+        gl.STATIC_DRAW
+    );
+
+    return {
+        positions : positionBuffer
+    }
+}
+
+const drawScene = (gl, programInfo, buffers)=>{
+    gl.clearColor(0, 0, 0, 1);
+    gl.clearDepth(1);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    const fieldOfView = 45 * Math.PI / 180; // lo pasamos a radianes
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const zNear = 0.1;
+    const zFar = 100;
+
+    const porjectionMatrix = mat4.create();
+}
+
 const main = ()=>{
     const gl = canvas.getContext('webgl');
 
@@ -69,8 +108,7 @@ const main = ()=>{
         }
     };
 
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    
 }
 
 window.onload = main;
