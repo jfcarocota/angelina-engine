@@ -100,6 +100,55 @@ const drawScene = (gl, programInfo, buffers)=>{
         zNear,
         zFar
     );
+
+    const modelViewMatrix = mat4.create();
+
+    mat4.translate(
+        modelViewMatrix,
+        modelViewMatrix,
+        [0, 0, -6]
+    );
+
+    {
+        /*make quad*/
+
+        const numComponents = 2;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexPosition,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    }
+
+    gl.useProgram(programInfo.program);
+
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.projectionMatrix,
+        false,
+        projectionMatrix
+    );
+
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.modelViewMatrix,
+        false,
+        modelViewMatrix
+    );
+
+    {
+        const offset = 0;
+        const vertexCount = 4;
+        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    }
 }
 
 const main = ()=>{
@@ -119,7 +168,7 @@ const main = ()=>{
         },
         uniformLocations : {
             projectionMatrix : gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-            modelViewMAtrix : gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
+            modelViewMatrix : gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
         }
     };
 
