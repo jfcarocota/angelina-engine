@@ -74,6 +74,15 @@ const initBuffers = gl =>{
     };
 }
 
+const drawScene = (gl, programInfo, buffers)=>{
+    gl.clearColor(0, 0, 0, 1);
+    gl.clearDepth(1);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+}
+
 const main = ()=>{
     const gl = canvas.getContext('webgl2');
 
@@ -98,9 +107,7 @@ const main = ()=>{
 
     const buffers = initBuffers(gl);
 
-
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    drawScene(gl, programInfo, buffers);
 }
 
 window.onload = main;
