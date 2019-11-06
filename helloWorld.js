@@ -2,18 +2,25 @@ const canvas = document.getElementById('glcanvas');
 
 const vsSource = `
 attribute vec4 aVertexPosition;
+attribute vec4 aVertexColor;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 
+varying lowp vec4 vColor;
+
 void main() {
   gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+  vColor = aVertexColor;
 }
 `;
 
 const fsSource = `
+
+varying lowp vec4 vColor;
+
 void main() {
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    gl_FragColor = vColor;
 }
 `;
 
@@ -61,16 +68,33 @@ const initBuffers = gl =>{
          1.0,  1.0,
         -1.0, -1.0,
          1.0, -1.0,
-      ];
+    ];
 
-      gl.bufferData(
+    gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array(positions),
         gl.STATIC_DRAW
     );
 
+    const colors = [
+        1, 1, 1, 1, //white
+        1, 0, 0, 1, //red
+        0, 1, 0, 1, //green
+        0, 0, 1, 1 //blue
+    ];
+
+    const colorBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(colors),
+        gl.STATIC_DRAW
+    );
+
     return {
-        position: positionBuffer
+        position: positionBuffer,
+        color : colorBuffer
     };
 }
 
@@ -130,6 +154,25 @@ const drawScene = (gl, programInfo, buffers)=>{
         gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
     }
 
+    /*Color*/
+    {
+        const numComponents = 4;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexColor,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexColor);
+      }
+
     gl.useProgram(programInfo.program);
 
     gl.uniformMatrix4fv(
@@ -164,7 +207,8 @@ const main = ()=>{
     const programInfo = {
         program : shaderProgram,
         attribLocations : {
-            vertexPosition : gl.getAttribLocation(shaderProgram, 'aVertexPosition')
+            vertexPosition : gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+            vertexColor : gl.getAttribLocation(shaderProgram, 'aVertexColor')
         },
         uniformLocations : {
             projectionMatrix : gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
