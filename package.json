@@ -1,0 +1,22 @@
+{
+  "name": "angelina-engine",
+  "version": "1.0.0",
+  "description": "2D Game Engine with webgl2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfcarocota/angelina-engine.git"
+  },
+  "author": "Jesus Caro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jfcarocota/angelina-engine/issues"
+  },
+  "homepage": "https://github.com/jfcarocota/angelina-engine#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

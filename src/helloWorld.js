@@ -1,34 +1,28 @@
 const canvas = document.getElementById('glcanvas');
 
 const vsSource = `
-attribute vec4 aVertexPosition;
-attribute vec4 aVertexColor;
-attribute vec2 aTextureCoord;
+    attribute vec4 aVertexPosition;
+    attribute vec2 aTextureCoord;
 
-uniform mat4 uModelViewMatrix;
-uniform mat4 uProjectionMatrix;
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
 
-varying lowp vec4 vColor;
+    varying highp vec2 vTextureCoord;
 
-varying highp vec2 vTextureCoord;
-
-void main() {
-  gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-  vColor = aVertexColor;
-  vTextureCoord = aTextureCoord;
-}
+    void main(void) {
+      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+      vTextureCoord = aTextureCoord;
+    }
 `;
 
 const fsSource = `
-varying highp vec2 vTextureCoord;
+    varying highp vec2 vTextureCoord;
 
-uniform sampler2D uSampler;
+    uniform sampler2D uSampler;
 
-varying lowp vec4 vColor;
-
-void main() {
-    gl_FragColor = texture2D(uSampler, vTextureCoord);
-}
+    void main(void) {
+      gl_FragColor = texture2D(uSampler, vTextureCoord);
+    }
 `;
 
 const loadShader = (gl, type, source)=>{
@@ -99,19 +93,23 @@ const initBuffers = gl =>{
         gl.STATIC_DRAW
     );
 
+    const textureCoordinates = [
+        // Front
+        0,  0,
+        1,  0,
+        1,  1,
+        0,  1
+    ];
+
     const textureCoordBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 
-  const textureCoordinates = [
-    // Front
-    0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
-    0.0,  1.0
-  ];
 
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
-                gl.STATIC_DRAW);
+    gl.bufferData(
+        gl.ARRAY_BUFFER, 
+        new Float32Array(textureCoordinates),
+        gl.STATIC_DRAW
+    );
 
     return {
         position: positionBuffer,
@@ -123,7 +121,7 @@ const initBuffers = gl =>{
 const isPowerOf2 = value =>{
     return (value & (value - 1)) == 0;
 }
-const drawScene = (gl, programInfo, buffers, deltaTime)=>{
+const drawScene = (gl, programInfo, buffers, texture, deltaTime)=>{
 
     /* render */
     gl.clearColor(0, 0, 0, 1);
@@ -193,7 +191,14 @@ const drawScene = (gl, programInfo, buffers, deltaTime)=>{
         const stride = 0; // how many bytes to get from one set to the next
         const offset = 0; // how many bytes inside the buffer to start from
         gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
-        gl.vertexAttribPointer(programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.textureCoord,
+            num, 
+            type, 
+            normalize, 
+            stride, 
+            offset
+        );
         gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
     }
 
@@ -211,13 +216,22 @@ const drawScene = (gl, programInfo, buffers, deltaTime)=>{
         modelViewMatrix
     );
 
+    // Tell WebGL we want to affect texture unit 0
+    gl.activeTexture(gl.TEXTURE0);
+
+    // Bind the texture to texture unit 0
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // Tell the shader we bound the texture to texture unit 0
+    gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+
     {
         const offset = 0;
         const vertexCount = 4;
         gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
     }
 
-    squareRotation += deltaTime;
+    //squareRotation += deltaTime;
 }
 
 
@@ -239,13 +253,15 @@ const loadTexture = (gl, url) =>{
     const srcFormat = gl.RGBA;
     const srcType = gl.UNSIGNED_BYTE;
     const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+
     gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                   width, height, border, srcFormat, srcType,
                   pixel);
   
     const image = new Image();
     image.crossOrigin = 'anonymous';
-    image.onload = function() {
+    
+    image.onload = ()=> {
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                     srcFormat, srcType, image);
@@ -270,9 +286,8 @@ const loadTexture = (gl, url) =>{
 }
 
 let squareRotation = 0;
-let then = 0;
 
-const render = now =>{
+const main = () =>{
     const gl = canvas.getContext('webgl2');
 
     if (!gl) {
@@ -296,19 +311,25 @@ const render = now =>{
         }
     };
 
-    const texture = loadTexture(gl, 'https://i.pinimg.com/originals/4e/48/ee/4e48ee9087dd6b18cbf6c0365251fcd9.jpg');
     const buffers = initBuffers(gl);
+    const texture = loadTexture(gl, 'https://de5l82skl2oz5.cloudfront.net/wp-content/uploads/2018/12/logo-la-salle.png');
 
-    now *= 0.001;
-    const deltaTime = now - then;
-    then = now;
+    let then = 0;
 
-    drawScene(gl, programInfo, buffers, deltaTime);
+    render = now =>{
+        now *= 0.001;
+        const deltaTime = now - then;
+        then = now;
 
+        drawScene(gl, programInfo, buffers, texture, deltaTime);
+
+        requestAnimationFrame(render);
+    }
     requestAnimationFrame(render);
 }
 
-requestAnimationFrame(render);
+
+main();
 
 /*url = new URL('https://www.google.com/?myvarible=1');
 let val = url.searchParams.get('myvarible');
