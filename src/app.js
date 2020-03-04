@@ -312,7 +312,7 @@ const main = () =>{
     };
 
     const buffers = initBuffers(gl);
-    const texture = loadTexture(gl, 'cubetexture.png');
+    const texture = loadTexture(gl, 'ulsa.jpg');
 
     let then = 0;
 
