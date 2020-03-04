@@ -259,7 +259,7 @@ const loadTexture = (gl, url) =>{
                   pixel);
   
     const image = new Image();
-    image.crossOrigin = 'anonymous';
+    //image.crossOrigin = 'anonymous';
     
     image.onload = ()=> {
       gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -312,7 +312,7 @@ const main = () =>{
     };
 
     const buffers = initBuffers(gl);
-    const texture = loadTexture(gl, 'https://de5l82skl2oz5.cloudfront.net/wp-content/uploads/2018/12/logo-la-salle.png');
+    const texture = loadTexture(gl, 'cubetexture.png');
 
     let then = 0;
 
@@ -330,9 +330,3 @@ const main = () =>{
 
 
 main();
-
-/*url = new URL('https://www.google.com/?myvarible=1');
-let val = url.searchParams.get('myvarible');
-console.log(val);
-
-console.log(window.location.href);*/
