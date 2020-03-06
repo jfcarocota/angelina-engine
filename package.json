@@ -1,7 +1,7 @@
 {
   "name": "angelina-engine",
-  "version": "1.0.0",
-  "description": "2D Game Engine with webgl2",
+  "version": "0.0.1",
+  "description": "Engine de para simulación de gráficos por computadora en navegador con tecnología WebGL.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,13 +10,21 @@
     "type": "git",
     "url": "git+https://github.com/jfcarocota/angelina-engine.git"
   },
-  "author": "Jesus Caro",
+  "keywords": [
+    "engine",
+    "2d",
+    "3d",
+    "webgl",
+    "cg"
+  ],
+  "author": "ULSA Noroeste",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jfcarocota/angelina-engine/issues"
   },
   "homepage": "https://github.com/jfcarocota/angelina-engine#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "figlet": "^1.3.0"
   }
 }

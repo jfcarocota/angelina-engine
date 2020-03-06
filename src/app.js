@@ -312,7 +312,7 @@ const main = () =>{
     };
 
     const buffers = initBuffers(gl);
-    const texture = loadTexture(gl, 'ulsa.jpg');
+    const texture = loadTexture(gl, './images/ulsa.jpg');
 
     let then = 0;
 
