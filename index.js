@@ -23,14 +23,10 @@ app.get('/',  (req, res) => {
 app.listen(port, 
     figlet('Angelina Engine', function(err, data) {
         if (err) {
-            console.log('Something went wrong...');
+            console.log('Something went wrong... unu');
             console.dir(err);
             return;
         }
-        console.log(`Server listening port: ${port}\n${data}`)
+        console.log(`Server listening on port: ${port} OwO\n${data}`)
     })    
 );
-
-/*app.listen(port, ()=> console.log(
-    `server on port:${port}\n`
-));*/
