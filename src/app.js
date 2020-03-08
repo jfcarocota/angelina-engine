@@ -1,3 +1,4 @@
+
 const canvas = document.getElementById('glcanvas');
 
 const vsSource = `
@@ -57,66 +58,6 @@ const initShader = (gl, vsSource, fsSource)=>{
     return shaderProgram;
 }
 
-
-const initBuffers = gl =>{
-    
-    const positionBuffer = gl.createBuffer();
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    const positions = [
-        -1.0,  1.0,
-         1.0,  1.0,
-        -1.0, -1.0,
-         1.0, -1.0,
-    ];
-
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(positions),
-        gl.STATIC_DRAW
-    );
-
-    const colors = [
-        1, 1, 1, 1, //white
-        1, 0, 0, 1, //red
-        0, 1, 0, 1, //green
-        0, 0, 1, 1 //blue
-    ];
-
-    const colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(colors),
-        gl.STATIC_DRAW
-    );
-
-    const textureCoordinates = [
-        // Front
-        0,  0,
-        1,  0,
-        1,  1,
-        0,  1
-    ];
-
-    const textureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-
-
-    gl.bufferData(
-        gl.ARRAY_BUFFER, 
-        new Float32Array(textureCoordinates),
-        gl.STATIC_DRAW
-    );
-
-    return {
-        position: positionBuffer,
-        textureCoord: textureCoordBuffer,
-        color : colorBuffer
-    };
-}
 
 const isPowerOf2 = value =>{
     return (value & (value - 1)) == 0;
@@ -295,6 +236,8 @@ const main = () =>{
         return;
     }
 
+    const vertexEngine = new VertexEngine(gl);
+
     const shaderProgram = initShader(gl, vsSource, fsSource);
 
     const programInfo = {
@@ -311,7 +254,7 @@ const main = () =>{
         }
     };
 
-    const buffers = initBuffers(gl);
+    const buffers = vertexEngine.getBuffer();
     const texture = loadTexture(gl, './images/ulsa.jpg');
 
     let then = 0;
