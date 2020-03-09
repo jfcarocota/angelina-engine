@@ -65,36 +65,19 @@ const isPowerOf2 = value =>{
 const drawScene = (gl, programInfo, buffers, texture, deltaTime)=>{
 
     /* render */
-    gl.clearColor(0, 0, 0, 1);
-    gl.clearDepth(1);
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
-
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    const render = new Render(gl);
+    render.clear();
 
     /*Camera */
 
-    const fieldOfView = 45 * Math.PI / 180;
-    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    const zNear = 0.1;
-    const zFar = 100;
-
-    const projectionMatrix = mat4.create();
-
-    mat4.perspective(
-        projectionMatrix,
-        fieldOfView,
-        aspect,
-        zNear,
-        zFar
-    );
+    const camera = new Camera(gl);
 
     const modelViewMatrix = mat4.create();
 
     mat4.translate(
         modelViewMatrix,
         modelViewMatrix,
-        [0, 0, -6]
+        [0, 0, -5]
     );
 
     mat4.rotate(
@@ -104,27 +87,9 @@ const drawScene = (gl, programInfo, buffers, texture, deltaTime)=>{
         [0, 0, 1]
     );
 
-    {
-        /*make quad*/
+    const rect = new Rectangle(gl, programInfo, buffers);
 
-        const numComponents = 2;
-        const type = gl.FLOAT;
-        const normalize = false;
-        const stride = 0;
-        const offset = 0;
-        
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-        gl.vertexAttribPointer(
-            programInfo.attribLocations.vertexPosition,
-            numComponents,
-            type,
-            normalize,
-            stride,
-            offset
-        );
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-    }
-
+    //Textura
     {
         const num = 2; // every coordinate composed of 2 values
         const type = gl.FLOAT; // the data in the buffer is 32 bit float
@@ -148,7 +113,7 @@ const drawScene = (gl, programInfo, buffers, texture, deltaTime)=>{
     gl.uniformMatrix4fv(
         programInfo.uniformLocations.projectionMatrix,
         false,
-        projectionMatrix
+        camera.getProjectionMatrix()
     );
 
     gl.uniformMatrix4fv(
