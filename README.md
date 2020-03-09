@@ -15,7 +15,7 @@ Para levantar el servidor local necesitaresmos introducir en la linea de comando
 Para modificar el servidor es necesario realizar ajustes en el index.html y index.js.
 
 ## Notas:
-- Estamos usando la librería “express.js npm”
-- npm= node package manager
+- Estamos usando la librería “express.js npm”.
+- npm= node package manager.
 - Para que algo jale en el servidor todo debe de estar dentro de “src folder” y si quieres imágenes en “images folder”.
-- Para importa un .js custom en index.html como una etiqueta normal de script
+- Para importa un .js custom en index.html como una etiqueta normal de script.
