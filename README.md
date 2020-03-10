@@ -31,13 +31,13 @@ Para modificar el servidor es necesario realizar ajustes en el index.html y inde
 # VertexEngine
 Consiste en un constructor que recibirá gls y un método de getBuffer que devolverá la posición del rectángulo, las coordenadas de la textura y el color.
 
-## Constructor:
+## Constructor
 Dentro del constructor se colocan los arreglos de la posición del rectángulo, del color y de las coordenadas de la textura.
 Se inicializan en el contexto de openGL la posición del rectángulo, del color y de las coordenadas de la textura mediante el gl de createBuffer.
 
 Para cada objeto se utiliza un gl de bindBuffer que enlaza el objeto en una localización del contexto especifica.
 Para cada objeto se utiliza un gl de bufferData que inicializa los valores contenidos en los objetos.
 
-## Método de getBuffer:
+## Método de getBuffer
 Devuelve el valor de los objetos para que sean cargados en escena.
 
