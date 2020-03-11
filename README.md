@@ -4,29 +4,12 @@
  
  Acontinuación se presenta la documentación para el uso de la librería. 
  
- 
-# ¿Cómo arrancar el proyecto?
- 
-## ¿Cómo instalar node?
-El sitio necesesita que se instale para poder utilizarse.
-
-## ¿Cómo instalar la paquetería en el programa?
-Para instalar toda la paqueterría del proyecto necesitaresmos introducir en la linea de comando el comando de "npm i" o "npm install".
-
-## ¿Cómo levantar el servidor local?
-Para levantar el servidor local necesitaresmos introducir en la linea de comando el comando de "node index".
-
-## ¿Cómo modificar el servidor?
-Para modificar el servidor es necesario realizar ajustes en el index.html y index.js.
-
-## Notas:
-- Estamos usando la librería “express.js npm”.
-- npm= node package manager.
-- Para que algo jale en el servidor todo debe de estar dentro de “src folder” y si quieres imágenes en “images folder”.
-- Para importa un .js custom en index.html como una etiqueta normal de script.
-
-
-
+## Pasos para arrancar el proyecto
+1) Instalar Node.js desde su sitio web.
+2) Para comprobar que la instalación fue exitosa en la línea de comando ejecuta el comando: "node --version"; y el comando "npm --version". 
+3) Entramos a la ruta del programa desde la línea de comando. Para navegar entre carpertas desde la línea de comando se utiliza el comando cd "nombre de la carpeta".
+4) Ya estando en la carpeta en donde esta el proyecto en la línea de comando colocaremos el comando: "npm i" o "npm install" para instalar la paquetería del proyecto e insertamos otro comando: "npm i express.js", acto seguido se descargaran todas los paquetes que se necesiten para poder levantar un servidor.
+5) Para abrir el proyecto insertaremos el comando: "node index" y buscaremos en el navegador el "localhost:8000".
 
 # VertexEngine
 Consiste en un constructor que recibirá gls y un método de getBuffer que devolverá la posición del rectángulo, las coordenadas de la textura y el color.
