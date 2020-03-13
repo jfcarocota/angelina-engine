@@ -4,6 +4,9 @@ const fs = require('fs');
 const figlet = require('figlet');
 const port = 8000;
 
+//app.locals.fileLoader = fs;
+global.fileLoader = fs;
+
 app.use('/src', express.static('src'));
 app.use('/images', express.static('images'));
 
