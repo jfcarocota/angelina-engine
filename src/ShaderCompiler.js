@@ -4,6 +4,9 @@ class ShaderCompiler
         this.gl = gl;
         this.vsSource = this.getFile(vsSource);
         this.fsSource = this.getFile(fsSource);
+
+        console.log(this.vsSource);
+        console.log(this.fsSource);
     }
 
     loadShader(type, source){
@@ -38,8 +41,18 @@ class ShaderCompiler
         return shaderProgram;
     }
 
-    getFile(filePath){
-        let xmlReq = new XMLHttpRequest();
+    async getFile(filePath, src){
+
+        const shaderSource = await fetch(filePath).then(respose => respose.text()).then(data => {return data});
+        console.log(shaderSource); 
+        if (shaderSource === null) {
+            alert("WARNING: Loading of:" + filePath + " Failed!");
+            return null;
+        }
+
+        src = shaderSource
+
+        /*let xmlReq = new XMLHttpRequest();
         xmlReq.open('GET', filePath, false);
         try {
             xmlReq.send();
@@ -55,6 +68,6 @@ class ShaderCompiler
             return null;
         }
 
-        return shaderSource;
+        return shaderSource;*/
     }
 }
