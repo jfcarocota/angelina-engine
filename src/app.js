@@ -86,7 +86,7 @@ const drawScene = (gl, programInfo, buffers, texture, deltaTime)=>{
 
 let squareRotation = 0;
 
-const main = () =>{
+const main = async () =>{
     const gl = canvas.getContext('webgl2');
 
     if (!gl) {
@@ -101,7 +101,7 @@ const main = () =>{
     const fsSource = './src/fs.glsl';
 
     const shaderCompiler = new ShaderCompiler(gl, vsSource, fsSource);
-    const shaderProgram = shaderCompiler.initShader();
+    const shaderProgram = await shaderCompiler.initShader();
 
     const programInfo = {
         program : shaderProgram,

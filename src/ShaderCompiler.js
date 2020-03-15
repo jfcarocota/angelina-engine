@@ -1,12 +1,10 @@
+
 class ShaderCompiler
 {
     constructor(gl, vsSource, fsSource){
         this.gl = gl;
-        this.vsSource = this.getFile(vsSource);
-        this.fsSource = this.getFile(fsSource);
-
-        console.log(this.vsSource);
-        console.log(this.fsSource);
+        this.vsSource = vsSource;
+        this.fsSource = fsSource;
     }
 
     loadShader(type, source){
@@ -23,9 +21,10 @@ class ShaderCompiler
         return shader;
     }
     
-    initShader(){
-        const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, this.vsSource);
-        const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, this.fsSource);
+    async initShader(){
+
+        const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, await this.getFile(this.vsSource));
+        const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, await this.getFile(this.fsSource));
         const shaderProgram = this.gl.createProgram();
     
         this.gl.attachShader(shaderProgram, vertexShader);
@@ -41,33 +40,13 @@ class ShaderCompiler
         return shaderProgram;
     }
 
-    async getFile(filePath, src){
+    async getFile(filePath){
 
-        const shaderSource = await fetch(filePath).then(respose => respose.text()).then(data => {return data});
-        console.log(shaderSource); 
+        const shaderSource = await fetch(filePath).then(respose => respose.text().then(data => {return data}));
         if (shaderSource === null) {
             alert("WARNING: Loading of:" + filePath + " Failed!");
             return null;
         }
-
-        src = shaderSource
-
-        /*let xmlReq = new XMLHttpRequest();
-        xmlReq.open('GET', filePath, false);
-        try {
-            xmlReq.send();
-        } catch (error) {
-            alert("Failed to load shader: " + filePath);
-            return null;
-        }
-
-        const shaderSource = xmlReq.responseText;
-    
-        if (shaderSource === null) {
-            alert("WARNING: Loading of:" + filePath + " Failed!");
-            return null;
-        }
-
-        return shaderSource;*/
+        return shaderSource;
     }
 }
